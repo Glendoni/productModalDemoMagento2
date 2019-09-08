@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Catalog\Block\Product\View */
+?>
+<?php $_product = $block->getProduct(); ?>
+<?php $openModelButtonTitle = __('Open Model Should Show This'); ?>
+<?php $productName = __('Product name : ') . $this->getProduct()->getName(); ?>
+
+<?php
+// @codingStandardsIgnoreFile
+/**
+ * Product description template
+ *
+ * @var $block \Magento\Catalog\Block\Product\View\Description
+ * @var $block \Magento\Catalog\Block\Product\View\Attributes
+ */
+?>
+<?php if ($_product->isSaleable()): ?>
+<div class="actions">
+    <button type="button" id="tempModelButton" class="action" data-trigger="trigger">
+        <span data-bind="i18n: '<?=$openModelButtonTitle?>'"></span>
+    </button>
+    <div data-bind="mageInit: {
+        'Magento_Ui/js/modal/modal':{
+            'type': 'popup',
+            'title': '<?= $productName ?>',
+            'trigger': '[data-trigger=trigger]',
+            'responsive': true,
+            'buttons': [{
+                text: 'Submit',
+                class: 'action'
+            }]
+        }}">
+        <div class="content">
+            <p class="just">Description: <?= /* @escapeNotVerified */
+                $this->helper('Magento\Catalog\Helper\Output')->productAttribute($block->getProduct(), $block->getProduct()->getDescription(), 'description') ?></p>
+            <p>Price: <?php /* @escapeNotVerified */
+                echo $block->getProductPrice($_product) ?></p>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <script type="text/javascript">
+        require(['jquery', 'demoButton'], function ($, demoButton) {
+            demoButton();
+        });
+    </script>
